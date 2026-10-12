@@ -51,31 +51,116 @@ public class MovieSuggestionLayton {
   }
 
   public static int getMinutes(Scanner input) {
+    int minutes = 0;
+    boolean valid = false;
 
+    while (!valid) {
+      System.out.print("Enter how much time you have (in mins): ");
+
+      if (input.hasNextInt()) {
+        minutes = input.nextInt();
+        input.nextLine();
+
+        if (minutes > 0) {
+          valid = true;
+        } else {
+          System.out.println("Time must be greater than zero.");
+        }
+      } else {
+        System.out.println("Please enter a whole number.");
+        input.nextLine();
+      }
+    }
+    return minutes;
   }
 
   public static String getGenre(Scanner input) {
+    String genre = "";
+    boolean valid = false;
 
+    while(!valid) {
+      System.out.print("Choose a genre (comedy, action, horror, romance): ");
+      genre = input.nextLine().trim().toLowerCase();
+
+      if (isValidGenre(genre)) {
+        valid = true;
+      } else {
+        System.out.println("Please choose comedy, action, horror, or romance.");
+      }
+    }
+    return genre;
   }
 
   public static boolean isValidGenre(String genre) {
+    if (genre == null || genre.length() == 0) {
+      return false;
+    }
 
+    String firstLetter = genre.substring(0, 1);
+    String remainingLetters = genre.substring(1);
+
+    if (firstLetter.length() != 1 || remainingLetters.indexOf(" ") >= 0) {
+      return false;
+    }
+
+    return genre.equals("comedy") || genre.equals("action") || genre.equals("horror") || genre.equals("romance");
   }
 
   public static String chooseMovie(int minutes, String genre, Random random, boolean[] alreadySuggested) {
+    List<Integer> matchingMovies = new ArrayList<>();
 
+    for (int i = 0; i < TITLES.length; i++) {
+      if (GENRES[i].equals(genre) && RUNTIMES[i] <= minutes && !alreadySuggested[i]) {
+        matchingMovies.add(i);
+      }
+    }
+    if (matchingMovies.isEmpty()) {
+      return null;
+    }
+
+    int randomPosition = random.nextInt(matchingMovies.size());
+    int movieIndex = matchingMovies.get(randomPosition);
+    alreadySuggested[movieIndex] = true;
+
+    return TITLES[movieIndex];
   }
 
   public static boolean anotherMovie(Scanner input) {
+    while (true) {
+      System.out.print("Want another suggestion? (type yes or no): ");
+      String answer = input.nextLine().trim().toLowerCase();
 
+      if (answer.equals("yes") || answer.equals("y")) {
+        return true;
+      } else if (answer.equals("no") || answer.equals("n")) {
+        return false;
+      } else {
+        System.out.println("Please enter yes or no.")
+      }
+    }
   }
 
   public static boolean askToStartOver(Scanner input) {
+    while (true) {
+      System.out.print("\nDo you want to search again with a different time or genre? (type yes or no): ");
+      String answer = input.nextLine().trim().toLowerCase();
 
+      if (answer.equals("yes") || answer.equals("y")) {
+        return true;
+      } else if (answer.equals("no") || answer.equals("n")) {
+        return false;
+      } else {
+        System.out.println("Please enter yes or no.")
+      }
+    }
   }
 
   public static int findMovieIndex(String title) {
-
+    for (int i = 0; i < TITLES.length; i++) {
+      if (TITLES[i].equals(titles)) {
+        return i;
+      }
+    }
+    return -1;
   }
-
 }
