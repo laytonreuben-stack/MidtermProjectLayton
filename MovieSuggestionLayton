@@ -1,1 +1,81 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
 
+public class MovieSuggestionLayton {
+
+  private static final String TITLES = {
+    "Ted", "The Mask", "Groundhog Day", "Mean Girls", "Clueless", "Rush Hour", "Men in Black", "Back to the Future", "The Lego Movie", "Jumanji", "The Incredibles", "Spider Man: Into the Spider Verse", "A Quiet Place", "Get Out", "The Conjuring", "Scream", "Coraline", "The Ring", "The Notebook", "10 Things I Hate About You", "Pride & Prejudice", "La La Land", "Titanic", "The Princess Bride"
+  };
+
+  private static final String[] GENRES = {
+    "comedy", "comedy", "comedy", "comedy", "comedy", "action", "action", "action", "action", "action", "action", "action", "horror", "horror", "horror", "horror", "horror", "horror", "romance", "romance", "romance", "romance", "romance", "romance"
+  };
+
+  private static final int[] RUNTIMES = {
+    104, 101, 101, 97, 97, 98, 98, 116, 100, 104, 115, 117, 90, 104, 112, 111, 100, 96, 123, 97, 135, 128, 195, 98
+  };
+
+  public static void main (String[] args) {
+    Scanner input = new Scanner(System.in);
+    Random random = new Random();
+
+    boolean continueProgram = true;
+    while(continueProgram) {
+      int minutes = getMinutes(input);
+      String genre = getGenre(input);
+      boolean[] alreadySuggested = new boolean[TITLES.length];
+
+      String suggetion = chooseMovie(minutes, genre, random, alreadySuggested);
+
+      while(suggestion != null) {
+        int movieIndex = findMovieIndex(suggestion);
+          System.out.println("\nMovie suggestion: " + suggestion);
+          System.out.println("Movie time: " + RUNTIMES[movieIndex] + " minutes");
+          if (!anotherMovie(input)) {
+            break;
+          }
+
+          suggestion = chooseMovie(minutes, genre, random, alreadySuggested);
+        }
+      }
+      if(suggestion == null) {
+        System.out.println("There are no more matching movies for that selection");
+      }
+      continueProgram = askToStartOver(input);
+    }
+
+    System.out.println("Enjoy your movie!");
+    input.close();
+  }
+
+  public static int getMinutes(Scanner input) {
+
+  }
+
+  public static String getGenre(Scanner input) {
+
+  }
+
+  public static boolean isValidGenre(String genre) {
+
+  }
+
+  public static String chooseMovie(int minutes, String genre, Random random, boolean[] alreadySuggested) {
+
+  }
+
+  public static boolean anotherMovie(Scanner input) {
+
+  }
+
+  public static boolean askToStartOver(Scanner input) {
+
+  }
+
+  public static int findMovieIndex(String title) {
+
+  }
+
+}
