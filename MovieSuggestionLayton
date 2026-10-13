@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class MovieSuggestionLayton {
 
-  private static final String TITLES = {
+  private static final String[] TITLES = {
     "Ted", "The Mask", "Groundhog Day", "Mean Girls", "Clueless", "Rush Hour", "Men in Black", "Back to the Future", "The Lego Movie", "Jumanji", "The Incredibles", "Spider Man: Into the Spider Verse", "A Quiet Place", "Get Out", "The Conjuring", "Scream", "Coraline", "The Ring", "The Notebook", "10 Things I Hate About You", "Pride & Prejudice", "La La Land", "Titanic", "The Princess Bride"
   };
 
@@ -22,30 +22,34 @@ public class MovieSuggestionLayton {
     Random random = new Random();
 
     boolean continueProgram = true;
-    while(continueProgram) {
+    while (continueProgram) {
       int minutes = getMinutes(input);
       String genre = getGenre(input);
       boolean[] alreadySuggested = new boolean[TITLES.length];
 
-      String suggetion = chooseMovie(minutes, genre, random, alreadySuggested);
+      String suggestion = chooseMovie(minutes, genre, random, alreadySuggested);
+      boolean ranOutOfMovies = false;
 
       while(suggestion != null) {
         int movieIndex = findMovieIndex(suggestion);
-          System.out.println("\nMovie suggestion: " + suggestion);
-          System.out.println("Movie time: " + RUNTIMES[movieIndex] + " minutes");
-          if (!anotherMovie(input)) {
-            break;
-          }
 
-          suggestion = chooseMovie(minutes, genre, random, alreadySuggested);
+        System.out.println("\nMovie suggestion: " + suggestion);
+        System.out.println("Movie time: " + RUNTIMES[movieIndex] + " minutes");
+
+        if (!anotherMovie(input)) {
+          break;
+        }
+
+        suggestion = chooseMovie(minutes, genre, random, alreadySuggested);
+        if (suggestion == null) {
+            ranOutOfMovies = true;
         }
       }
-      if(suggestion == null) {
+      if (ranOutOfMovies) {
         System.out.println("There are no more matching movies for that selection");
       }
       continueProgram = askToStartOver(input);
     }
-
     System.out.println("Enjoy your movie!");
     input.close();
   }
@@ -126,38 +130,48 @@ public class MovieSuggestionLayton {
   }
 
   public static boolean anotherMovie(Scanner input) {
-    while (true) {
+    boolean valid = false;
+    boolean wantsAnother = false;
+
+    while (!valid) {
       System.out.print("Want another suggestion? (type yes or no): ");
       String answer = input.nextLine().trim().toLowerCase();
 
       if (answer.equals("yes") || answer.equals("y")) {
-        return true;
+        wantsAnother = true;
+        valid = true;
       } else if (answer.equals("no") || answer.equals("n")) {
-        return false;
+        valid = true;
       } else {
-        System.out.println("Please enter yes or no.")
+        System.out.println("Please enter yes or no.");
       }
     }
+    return wantsAnother;
   }
 
   public static boolean askToStartOver(Scanner input) {
-    while (true) {
+    boolean valid = false;
+    boolean wantsToStartOver = false;
+
+    while (!valid) {
       System.out.print("\nDo you want to search again with a different time or genre? (type yes or no): ");
       String answer = input.nextLine().trim().toLowerCase();
 
       if (answer.equals("yes") || answer.equals("y")) {
-        return true;
+        wantsToStartOver = true;
+        valid = true;
       } else if (answer.equals("no") || answer.equals("n")) {
-        return false;
+        valid = true;
       } else {
-        System.out.println("Please enter yes or no.")
+        System.out.println("Please enter yes or no.");
       }
     }
+    return wantsToStartOver;
   }
 
   public static int findMovieIndex(String title) {
     for (int i = 0; i < TITLES.length; i++) {
-      if (TITLES[i].equals(titles)) {
+      if (TITLES[i].equals(title)) {
         return i;
       }
     }
